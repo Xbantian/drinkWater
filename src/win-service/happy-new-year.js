@@ -25,17 +25,11 @@ job();
 
 
 function scheduleCronstyle() {
-    schedule.scheduleJob('10 35 5 * * 1-5', function () {
+    schedule.scheduleJob('0 0 0 1 2 * 2019', function () {
         console.log('scheduleCronstyle:' + new Date());
         job();
     });
 }
 
-// scheduleCronstyle();
+scheduleCronstyle();
 
-const speak = (content) => {
-    ding.model.msgtype = 'text';
-    ding.model.text.content = content
-    ding.send(ding.model)
-}
-// speak(`那下周二就不抽了吧~`);

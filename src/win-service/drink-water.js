@@ -5,7 +5,7 @@ let task = require('../tasks/drink-water');
 let { model, send, init } = require('../utils/to-ding');
 let { markdown } = model;
 
-let tokens = require('../utils/get-config');
+let { tokens } = require('../utils/get-config');
 
 init(tokens.token);
 
