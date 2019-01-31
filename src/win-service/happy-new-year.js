@@ -4,7 +4,14 @@ let schedule = require('node-schedule');
 let { model, send, init } = require('../utils/to-ding');
 let { markdown } = model;
 
-const token = `56fab40ea43f9b5b74c9b680879bf8f43db7ab8b24fe139c4281d61989f98044`;
+let token = null;
+try {
+    token = require('../../config/ding-token').myTest;
+    console.log(token);
+} catch (err) {
+    console.log(err);
+}
+
 init(token);
 
 async function job() {
@@ -17,11 +24,7 @@ job();
 
 
 
-
 function scheduleCronstyle() {
-    // schedule.scheduleJob('10 49 11 * * 1-5', function () {
-    //     console.log('scheduleCronstyle:' + new Date());
-    // });
     schedule.scheduleJob('10 35 5 * * 1-5', function () {
         console.log('scheduleCronstyle:' + new Date());
         job();
