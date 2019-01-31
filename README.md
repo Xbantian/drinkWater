@@ -6,3 +6,6 @@
 ## 配置方法
 
  - 添加文件config/ding-token.local.js,如果没有该配置会读取config/ding-token.js
+
+ ## 安转Windows服务
+ -  yarn start
