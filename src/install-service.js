@@ -3,8 +3,8 @@ var Service = require('node-windows').Service;
 // Create a new service object
 var svc = new Service({
     name: 'adrinkWater',
-    // description: '自定义服务-喝水',
-    script: require('path').join(__dirname, 'index.js')
+    description: '自定义服务-喝水',
+    script: require('path').join(__dirname, './win-service/drink-water.js')
 });
 
 // Listen for the "install" event, which indicates the
@@ -13,5 +13,5 @@ var svc = new Service({
 //     svc.start();
 // });
 
-// svc.install();
-svc.uninstall();
+svc.install();
+// svc.uninstall();

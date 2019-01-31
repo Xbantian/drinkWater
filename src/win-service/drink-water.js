@@ -6,7 +6,7 @@ let { markdown } = model;
 
 let token = null;
 try {
-    token = require('../../config/ding-token').drinkWater;
+    token = require('../../config/ding-token').myTest;
     console.log(token);
 } catch (err) {
     console.log(err);
@@ -39,5 +39,5 @@ function scheduleCronstyle() {
     });
 }
 
-// scheduleCronstyle();
+scheduleCronstyle();
 
