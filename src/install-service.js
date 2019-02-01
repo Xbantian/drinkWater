@@ -2,8 +2,8 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-    name: 'test',
-    description: '自定义服务-喝水',
+    name: 'happy-new-year',
+    description: '喝水群新年彩蛋',
     script: require('path').join(__dirname, './win-service/happy-new-year.js')
 });
 

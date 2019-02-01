@@ -2,11 +2,12 @@
 let schedule = require('node-schedule');
 
 let { model, send, init } = require('../utils/to-ding');
+
 let { text } = model;
 
 let { tokens } = require('../utils/get-config');
 
-init(tokens.myTest);
+init(tokens.token);
 
 async function job() {
     text.text = {
@@ -38,15 +39,15 @@ Happy New Year! We are Family!
 
 
 function scheduleCronstyle() {
-    schedule.scheduleJob('58 59 23 31 1 * 2019', function () {
-        console.log('scheduleCronstyle:' + new Date());
-        job();
-    });
-    // schedule.scheduleJob('58 59 23 4 2 * 2019', function () {
+    // schedule.scheduleJob('58 59 23 31 1 * 2019', function () {
     //     console.log('scheduleCronstyle:' + new Date());
     //     job();
     // });
+    schedule.scheduleJob('58 59 23 4 2 * 2019', function () {
+        console.log('scheduleCronstyle:' + new Date());
+        job();
+    });
 }
 
-// scheduleCronstyle();
+scheduleCronstyle();
 

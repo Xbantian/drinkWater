@@ -1,3 +1,4 @@
 /config/ding-token.local.js
 /src/utils/specialWater.js
 /node_modules
+/src/win-service/daemon
