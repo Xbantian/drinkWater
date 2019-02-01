@@ -1,7 +1,0 @@
-c:\Users\greedy\Desktop\water\drinkSer\node_modules\node-windows\lib\wrapper.js:177
-    child.send('shutdown');
-          ^
-
-TypeError: Cannot read property 'send' of null
-    at process.killkid (c:\Users\greedy\Desktop\water\drinkSer\node_modules\node-windows\lib\wrapper.js:177:11)
-    at process.emit (events.js:182:13)
