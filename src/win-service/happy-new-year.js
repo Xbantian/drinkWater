@@ -11,7 +11,6 @@ init(tokens.myTest);
 async function job() {
     text.text = {
         content: `大家好!
-我是你们的人工智障!
 新年的钟声正在敲响
 过去一年我们
 喝水预防肾结石
@@ -24,7 +23,9 @@ async function job() {
 新年快乐，身体健康
 万事如意，阖家欢乐！
 
-Happy New Year，We are Family!
+Happy New Year! We are Family!
+
+        ———来自爱你们的人工智障
 
 `
     }
@@ -37,7 +38,7 @@ Happy New Year，We are Family!
 
 
 function scheduleCronstyle() {
-    schedule.scheduleJob('50 53 18 31 1 * 2019', function () {
+    schedule.scheduleJob('58 59 23 31 1 * 2019', function () {
         console.log('scheduleCronstyle:' + new Date());
         job();
     });
@@ -47,5 +48,5 @@ function scheduleCronstyle() {
     // });
 }
 
-scheduleCronstyle();
+// scheduleCronstyle();
 

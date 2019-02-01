@@ -1,0 +1,25 @@
+<service>
+	<id>test.exe</id>
+	<name>test</name>
+	<description>自定义服务-喝水</description>
+	<executable>C:\Program Files\nodejs\node.exe</executable>
+	<logmode>rotate</logmode>
+	<argument>--harmony</argument>
+	<argument>c:\Users\greedy\Desktop\water\drinkSer\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>c:\Users\greedy\Desktop\water\drinkSer\src\win-service\happy-new-year.js</argument>
+	<argument>--log</argument>
+	<argument>test wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.25</argument>
+	<argument>--wait</argument>
+	<argument>1</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<stoptimeout>30sec</stoptimeout>
+	<workingdirectory>c:\Users\greedy\Desktop\water\drinkSer</workingdirectory>
+</service>
