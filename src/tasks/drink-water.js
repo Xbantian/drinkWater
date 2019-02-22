@@ -44,6 +44,10 @@ async function main() {
     console.log("----------------------今日数据--------------------------");
     console.log(persons);
     console.log("----------------------今日数据--------------------------");
+    persons.forEach(p => {
+        p.randomNum = services.getRandomNum(1000000);
+    });
+    persons.sort((a, b) => a.randomNum - b.randomNum);
     let { today, waiterNum } = services.start(persons);
 
     for (let idx = 0; idx < persons.length; idx++) {
@@ -98,7 +102,7 @@ async function main() {
         );
     });
     //记录本次结果
-    console.log(today);
+    console.log(today.map(p=>p.name).join(','));
     connection.end();
     return { today, newPersons };
 }
@@ -141,10 +145,10 @@ const services = {
                 customer: []
             };
         });
-        tempPersons.forEach(p => {
-            p.randomNum = services.getRandomNum(1000000);
-        });
-        tempPersons.sort((a, b) => a - b);
+        // tempPersons.forEach(p => {
+        //     p.randomNum = services.getRandomNum(1000000);
+        // });
+        // tempPersons.sort((a, b) => a.randomNum - b.randomNum);
 
         special && special(today, tempPersons); //进一步特殊乱序
         tempPersons.forEach((p, idx) => {
