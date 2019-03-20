@@ -8,7 +8,7 @@ let { markdown } = model;
 let { tokens } = require("../utils/get-config");
 
 let { toStr } = require("../utils/utils");
-init(tokens.myTest);
+init(tokens.token);
 
 async function job() {
     try {

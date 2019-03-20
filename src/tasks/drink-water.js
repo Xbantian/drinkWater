@@ -13,8 +13,8 @@ let connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "123456",
-    database: "water_test"
-    // database: "water"
+    // database: "water_test"
+    database: "water"
 });
 connection.connect();
 
