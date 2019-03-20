@@ -1,6 +1,7 @@
 //公平模式，服务的人越多减的越多
 const VALUE = 15; //收服务者加15点
 let mysql = require("mysql");
+let { toStr } = require("../utils/utils");
 let special = null;
 try {
     special = require("../utils/specialWater").special;
@@ -12,11 +13,13 @@ let connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "123456",
-    // database: "water_test"
-    database: "water"
+    database: "water_test"
+    // database: "water"
 });
+connection.connect();
 
 let insertRecord = "INSERT INTO record(sid,mid,createTime,scale) VALUES ?";
+let insertRecordStr = "INSERT INTO record_str(record,createTime) VALUES ?";
 let updatePlayer = "UPDATE player SET scale = ?,count = ? WHERE Id = ?";
 
 async function myWait(fun) {
@@ -26,7 +29,6 @@ async function myWait(fun) {
 }
 
 async function main() {
-    connection.connect();
     let persons = await myWait(res => {
         connection.query("SELECT * FROM player where isHoliday=0;", function(
             error,
@@ -101,10 +103,43 @@ async function main() {
             }
         );
     });
+
+    //保存明日安排
+    await myWait(res => {
+        connection.query(
+            insertRecordStr,
+            [[[toStr(today), new Date()]]],
+            function(err, result) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                res();
+            }
+        );
+    });
     //记录本次结果
-    console.log(today.map(p=>p.name).join(','));
-    connection.end();
+    console.log(today.map(p => p.name).join(","));
+    // connection.end();
     return { today, newPersons };
+}
+
+async function morning(params) {
+    // connection.connect();
+    let today = await myWait(res => {
+        connection.query(
+            "SELECT * FROM record_str order by id desc limit 1;",
+            function(error, results, fields) {
+                if (error) {
+                    console.log(error);
+                    return;
+                }
+                res(results);
+            }
+        );
+    });
+    // connection.end();
+    return today;
 }
 
 //功能函数
@@ -167,7 +202,8 @@ const services = {
     isCurrent: (begin, len, current) => current <= begin + len
 };
 module.exports = {
-    main
+    main,
+    morning
 };
 
 // main().then(re => {

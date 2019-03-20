@@ -7,7 +7,8 @@ let { markdown } = model;
 
 let { tokens } = require("../utils/get-config");
 
-init(tokens.token);
+let { toStr } = require("../utils/utils");
+init(tokens.myTest);
 
 async function job() {
     try {
@@ -16,18 +17,12 @@ async function job() {
             console.log("task 失败");
             return;
         }
-        let str = `## 下次安排 \r\n\r\n\r\n\r\n`;
-
-        today.forEach(p => {
-            str += `**${p.name}** : ${p.record.customer
-                .map(r => r.name)
-                .join("、")}\r\n\r\n`;
-        });
 
         markdown.markdown = {
             title: `下次倒水安排~`,
-            text: str
+            text: toStr(today)
         };
+
         markdown.at.isAtAll = true;
         send(markdown);
         setTimeout(() => {
@@ -53,8 +48,28 @@ function subJob(newPersons) {
     send(markdown);
 }
 
+async function morningJob() {
+    try {
+        let today = await task.morning();
+        console.log(today);
+        markdown.markdown = {
+            title: `今日倒水安排~`,
+            text: today[0].record.replace("下次", "今日")
+        };
+        markdown.at.isAtAll = true;
+        send(markdown);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 // try {
-//     job();
+//     setInterval(() => {
+//         job();
+//         setTimeout(() => {
+//             morningJob();
+//         }, 2000);
+//     }, 6000);
 // } catch (err) {
 //     console.log(err);
 // }
@@ -62,9 +77,18 @@ function subJob(newPersons) {
 function scheduleCronstyle() {
     //周一到周五下午自动抽水
     schedule.scheduleJob("0 21 18 * * 1-5", function() {
-        console.log("启动任务-scheduleCronstyle:" + new Date());
+        console.log("启动任务-抽水:" + new Date());
         try {
             job();
+        } catch (err) {
+            console.log(err);
+        }
+    });
+    //周一到周五下午自动抽水
+    schedule.scheduleJob("0 10 10 * * 1-5", function() {
+        console.log("启动任务-播报:" + new Date());
+        try {
+            morningJob();
         } catch (err) {
             console.log(err);
         }
