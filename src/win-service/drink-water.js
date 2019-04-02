@@ -18,15 +18,16 @@ async function job() {
             return;
         }
 
-        markdown.markdown = {
-            title: `下次倒水安排~`,
-            text: toStr(today)
-        };
-
-        markdown.at.isAtAll = true;
-        send(markdown);
+        subJob(newPersons);
+        //一秒后发安排
         setTimeout(() => {
-            subJob(newPersons);
+            markdown.markdown = {
+                title: `下次倒水安排~`,
+                text: toStr(today)
+            };
+    
+            markdown.at.isAtAll = true;
+            send(markdown);
         }, 1000);
     } catch (e) {
         console.log(e);

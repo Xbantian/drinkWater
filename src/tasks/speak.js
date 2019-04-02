@@ -6,18 +6,20 @@ let { text, markdown } = model;
 
 let { tokens } = require("../utils/get-config");
 
-init(tokens.myTest);
+// init(tokens.myTest);
+init(tokens.token);
 
-function text() {
+function sendText() {
     text.text = {
-        content: `欢迎~
-`
+        content: `要加入我们吗~`
     };
-    text.at.isAtAll = true;
+    // text.at.isAtAll = true;
+    text.at.atMobiles = [15700084920, 18657199119];
+
     send(text);
 }
 
-function markdown() {
+function sendMarkdown() {
     markdown.markdown = {
         title: `下次倒水安排~`,
         text: `
@@ -28,4 +30,4 @@ function markdown() {
     send(markdown);
 }
 
-// text();
+sendText();
