@@ -11,10 +11,10 @@ init(tokens.token);
 
 function sendText() {
     text.text = {
-        content: `要加入我们吗~`
+        content: `请输入昵称，两个字~`
     };
     // text.at.isAtAll = true;
-    text.at.atMobiles = [15700084920, 18657199119];
+    text.at.atMobiles = [];
 
     send(text);
 }
