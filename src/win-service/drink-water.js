@@ -4,12 +4,11 @@ let task = require("../tasks/drink-water");
 // let { getDingToken } = require('../utils/get-config');
 let { model, send, init } = require("../utils/to-ding");
 let { markdown } = model;
-
 let { tokens } = require("../utils/get-config");
+let { toStr, doJobWhenWeekend } = require("../utils/utils");
+init(tokens.myTest);
 
-let { toStr } = require("../utils/utils");
-init(tokens.token);
-
+//晚间主任务
 async function job() {
     try {
         let { today, newPersons } = await task.main();
@@ -25,7 +24,7 @@ async function job() {
                 title: `下次倒水安排~`,
                 text: toStr(today)
             };
-    
+
             markdown.at.isAtAll = true;
             send(markdown);
         }, 1000);
@@ -33,7 +32,7 @@ async function job() {
         console.log(e);
     }
 }
-
+//晚间子任务
 function subJob(newPersons) {
     let str = `# 幸运榜 \r\n\r\n\r\n\r\n`;
 
@@ -48,7 +47,7 @@ function subJob(newPersons) {
     markdown.at.isAtAll = false;
     send(markdown);
 }
-
+//早上播报
 async function morningJob() {
     try {
         let today = await task.morning();
@@ -64,8 +63,23 @@ async function morningJob() {
     }
 }
 
+function scheduleCronstyle() {
+    //抽奖
+    schedule.scheduleJob("0 21 18 * * ?", function() {
+        console.log("启动任务-抽奖:" + new Date());
+        doJobWhenWeekend(job);
+    });
+    //播报
+    schedule.scheduleJob("0 10 10 * * ?", function() {
+        console.log("启动任务-播报:" + new Date());
+        doJobWhenWeekend(morningJob);
+    });
+}
+
+scheduleCronstyle();
+
 // try {
-//     setInterval(() => {
+//     setTimeout(() => {
 //         job();
 //         setTimeout(() => {
 //             morningJob();
@@ -74,26 +88,3 @@ async function morningJob() {
 // } catch (err) {
 //     console.log(err);
 // }
-
-function scheduleCronstyle() {
-    //周一到周五下午自动抽水
-    schedule.scheduleJob("0 21 18 * * 1-5", function() {
-        console.log("启动任务-抽水:" + new Date());
-        try {
-            job();
-        } catch (err) {
-            console.log(err);
-        }
-    });
-    //周一到周五下午自动抽水
-    schedule.scheduleJob("0 10 10 * * 1-5", function() {
-        console.log("启动任务-播报:" + new Date());
-        try {
-            morningJob();
-        } catch (err) {
-            console.log(err);
-        }
-    });
-}
-
-scheduleCronstyle();
