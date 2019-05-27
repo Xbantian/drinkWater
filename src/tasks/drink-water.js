@@ -50,12 +50,27 @@ async function main() {
         p.randomNum = services.getRandomNum(1000000);
     });
     persons.sort((a, b) => a.randomNum - b.randomNum);
-    let { today, waiterNum } = services.start(persons);
+    //分组处理
+    let personGroup = services.groupBy(persons);
 
+    let todayList = [];
+    for (var key in personGroup) {
+        let { today, waiterNum } = services.start(personGroup[key]);
+        todayList.push({
+            today,
+            key
+        });
+    }
+
+    //更新每个人的数据大数据库，这里应该写成批量更新
     for (let idx = 0; idx < persons.length; idx++) {
         const p = persons[idx];
-        let t = today.find(t => t.name == p.name);
+        // let t = today.find(t => t.name == p.name);
+        let t = todayList.find(todayObj =>
+            todayObj.today.find(t => t.name == p.name)
+        );
         if (t) {
+            t = t.today;
             p.scale -= VALUE + t.record.customer.length * VALUE;
             p.count++;
         }
@@ -74,10 +89,18 @@ async function main() {
         });
     }
 
+    //更新记录到数据库
     let t = [];
-    today.forEach(s => {
-        s.record.customer.forEach(m => {
-            t.push([s.id, m.id, s.record.date, VALUE]);
+    // today.forEach(s => {
+    //     s.record.customer.forEach(m => {
+    //         t.push([s.id, m.id, s.record.date, VALUE]);
+    //     });
+    // });
+    todayList.forEach(todayObj => {
+        todayObj.today.forEach(s => {
+            s.record.customer.forEach(m => {
+                t.push([s.id, m.id, s.record.date, VALUE]);
+            });
         });
     });
     await myWait(res => {
@@ -105,23 +128,27 @@ async function main() {
     });
 
     //保存明日安排
-    await myWait(res => {
-        connection.query(
-            insertRecordStr,
-            [[[toStr(today), new Date()]]],
-            function(err, result) {
-                if (err) {
-                    console.log(err);
-                    return;
+    for (let idx = 0; idx < todayList.length; idx++) {
+        const todayObj = todayList[idx];
+        await myWait(res => {
+            connection.query(
+                insertRecordStr,
+                [[[toStr(todayObj.today), new Date()]]],
+                function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    res();
                 }
-                res();
-            }
-        );
-    });
+            );
+        });
+    }
+
     //记录本次结果
-    console.log(today.map(p => p.name).join(","));
+    console.log(JSON.stringify(todayList));
     // connection.end();
-    return { today, newPersons };
+    return { todayList, newPersons };
 }
 
 async function morning(params) {
@@ -199,7 +226,15 @@ const services = {
         });
         return total;
     },
-    isCurrent: (begin, len, current) => current <= begin + len
+    isCurrent: (begin, len, current) => current <= begin + len,
+    groupBy: list => {
+        let obj = {};
+        list.forEach(item => {
+            obj[item.group] = obj[item.group] || [];
+            obj[item.group].push(item);
+        });
+        return obj;
+    }
 };
 module.exports = {
     main,

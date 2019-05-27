@@ -11,8 +11,8 @@ init(tokens.myTest);
 //晚间主任务
 async function job() {
     try {
-        let { today, newPersons } = await task.main();
-        if (!today.length) {
+        let { todayList, newPersons } = await task.main();
+        if (!todayList || !todayList.length) {
             console.log("task 失败");
             return;
         }
@@ -20,13 +20,15 @@ async function job() {
         subJob(newPersons);
         //一秒后发安排
         setTimeout(() => {
-            markdown.markdown = {
-                title: `下次倒水安排~`,
-                text: toStr(today)
-            };
+            todayList.forEach(todayObj => {
+                markdown.markdown = {
+                    title: `下次倒水安排~${todayObj.key}`,
+                    text: toStr(todayObj.today)
+                };
 
-            markdown.at.isAtAll = true;
-            send(markdown);
+                markdown.at.isAtAll = true;
+                send(markdown);
+            });
         }, 1000);
     } catch (e) {
         console.log(e);
