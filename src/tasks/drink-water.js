@@ -13,8 +13,8 @@ let connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "123456",
-    // database: "water_test"
-    database: "water"
+    database: "water_test"
+    // database: "water"
 });
 connection.connect();
 
@@ -66,11 +66,12 @@ async function main() {
     for (let idx = 0; idx < persons.length; idx++) {
         const p = persons[idx];
         // let t = today.find(t => t.name == p.name);
-        let t = todayList.find(todayObj =>
-            todayObj.today.find(t => t.name == p.name)
-        );
+        let t = null;
+        todayList.find(todayObj =>{
+            t = todayObj.today.find(t => t.name == p.name)
+            return t
+        });
         if (t) {
-            t = t.today;
             p.scale -= VALUE + t.record.customer.length * VALUE;
             p.count++;
         }
@@ -133,7 +134,7 @@ async function main() {
         await myWait(res => {
             connection.query(
                 insertRecordStr,
-                [[[toStr(todayObj.today), new Date()]]],
+                [[[toStr(todayObj), new Date()]]],
                 function(err, result) {
                     if (err) {
                         console.log(err);
@@ -155,7 +156,7 @@ async function morning(params) {
     // connection.connect();
     let today = await myWait(res => {
         connection.query(
-            "SELECT * FROM record_str order by id desc limit 1;",
+            "SELECT * FROM record_str order by id desc limit 2;",
             function(error, results, fields) {
                 if (error) {
                     console.log(error);

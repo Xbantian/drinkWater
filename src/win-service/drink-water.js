@@ -23,7 +23,7 @@ async function job() {
             todayList.forEach(todayObj => {
                 markdown.markdown = {
                     title: `下次倒水安排~${todayObj.key}`,
-                    text: toStr(todayObj.today)
+                    text: toStr(todayObj)
                 };
 
                 markdown.at.isAtAll = true;
@@ -54,12 +54,14 @@ async function morningJob() {
     try {
         let today = await task.morning();
         console.log(today);
-        markdown.markdown = {
-            title: `今日倒水安排~`,
-            text: today[0].record.replace("下次", "今日")
-        };
-        markdown.at.isAtAll = true;
-        send(markdown);
+        today.forEach(item =>{
+            markdown.markdown = {
+                title: `今日倒水安排~`,
+                text: item.record.replace("下次", "今日")
+            };
+            markdown.at.isAtAll = true;
+            send(markdown);
+        })
     } catch (e) {
         console.log(e);
     }

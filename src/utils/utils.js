@@ -1,9 +1,9 @@
 let http = require("http");
 
-const toStr = today => {
-    let str = `## 下次安排 \r\n\r\n\r\n\r\n`;
+const toStr = todayObj => {
+    let str = `## 下次安排 — ${todayObj.key} \r\n\r\n\r\n\r\n`;
 
-    today.forEach(p => {
+    todayObj.today.forEach(p => {
         str += `**${p.name}** : ${p.record.customer
             .map(r => r.name)
             .join("、")}\r\n\r\n`;
