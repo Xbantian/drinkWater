@@ -41,7 +41,7 @@ const isHoliday = (today = new Date()) => {
 
 const doJobWhenWeekend = job => {
     let date = new Date();
-    let isWeekend = date.getDay == 0 || date.getDay == 6;
+    let isWeekend = date.getDay() == 0 || date.getDay() == 6;
     isHoliday(date)
         .then(res => {
             //周末，但是要上班（补班）|班
